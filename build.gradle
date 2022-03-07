@@ -36,5 +36,5 @@ tasks.named('test') {
 }
 
 tasks.jar {
-    enable = false
+    enabled = false
 }
