@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 // TODO: Configure CORS
 @CrossOrigin("*")
-@EnableWebMvc
 public class HumansVsZombiesBackendApplication {
 
     public static void main(String[] args) {
