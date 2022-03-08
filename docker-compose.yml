@@ -21,7 +21,7 @@ services:
     build: .
     environment:
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url" : "jdbc:postgresql://postgresdb:$POSTGRES_DOCKER_PORT/$POSTGRES_DATABASE?useSSL=false",
+        "spring.datasource.url" : "jdbc:postgresql://postgresdb:$POSTGRES_DOCKER_PORT/$POSTGRES_DB?useSSL=false",
         "spring.datasource.username" : "$POSTGRES_USER",
         "spring.datasource.password" : "$POSTGRES_PASSWORD",
         "spring.datasource.driver-class-name" : "org.postgresql.Driver",
