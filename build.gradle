@@ -22,8 +22,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+    // https://mvnrepository.com/artifact/org.keycloak/keycloak-spring-boot-starter
+    implementation 'org.keycloak:keycloak-spring-boot-starter:17.0.0'
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+    // https://mvnrepository.com/artifact/org.keycloak.bom/keycloak-adapter-bom
+    implementation 'org.keycloak.bom:keycloak-adapter-bom:17.0.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
