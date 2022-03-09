@@ -19,10 +19,15 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        // Temporarily disabled security. To enable, uncomment this, comment rest of method code.
+        /*http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated();*/
+
+        http.authorizeRequests().antMatchers("/**").permitAll();
+        http.headers().frameOptions().disable();
+        http.csrf().disable();
     }
 
     @Autowired
