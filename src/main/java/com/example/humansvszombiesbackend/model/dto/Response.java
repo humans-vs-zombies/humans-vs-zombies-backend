@@ -10,7 +10,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Response<T> {
-    private boolean success = true;
+
+    private final boolean success;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String error;
@@ -18,10 +19,18 @@ public class Response<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T payload;
 
-    public Response(T payload) { this.payload = payload; }
+    public Response(T payload) {
+        this(payload, true);
+    }
+
+    public Response(T payload, boolean success) {
+        this.success = success;
+        this.payload = payload;
+    }
 
     public Response(String error) {
         this.success = false;
         this.error = error;
     }
+
 }
