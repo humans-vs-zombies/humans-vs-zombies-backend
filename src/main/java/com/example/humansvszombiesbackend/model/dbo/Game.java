@@ -13,12 +13,13 @@ import javax.persistence.*;
 @Entity
 public class Game {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private Integer id;
 
     @Column(length = 40, nullable = false)
     private String name;
 
+    @Builder.Default
     @Column(nullable = false)
     private GameState state = GameState.CONFIGURATION;
 }
