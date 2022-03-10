@@ -1,18 +1,39 @@
 package com.example.humansvszombiesbackend.controller;
 
+import com.example.humansvszombiesbackend.model.dbo.Game;
+import com.example.humansvszombiesbackend.model.dto.Response;
+import com.example.humansvszombiesbackend.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/game")
 public class GameController {
+    private final GameRepository games;
 
     @GetMapping
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Heisann!");
+    public ResponseEntity<List<Game>> findAllGames() {
+        return ResponseEntity.ok(games.findAll());
+    }
+
+    @SneakyThrows
+    @PostMapping
+    public ResponseEntity<Response<Game>> saveGame(
+            @RequestBody(required = false) Game game
+    ) {
+        if(game == null) {
+            return ResponseEntity.badRequest()
+                    .body(new Response<>("Invalid game object supplied"));
+        }
+
+        Game savedGame = games.save(game);
+        URI uri = new URI("/api/v1/game/" + savedGame.getId());
+        return ResponseEntity.created(uri).body(new Response<>(savedGame));
     }
 }
