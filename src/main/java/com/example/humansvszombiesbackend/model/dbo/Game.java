@@ -22,4 +22,8 @@ public class Game {
     @Builder.Default
     @Column(nullable = false)
     private GameState state = GameState.CONFIGURATION;
+
+    @Builder.Default
+    @Column
+    private String description = null;
 }
