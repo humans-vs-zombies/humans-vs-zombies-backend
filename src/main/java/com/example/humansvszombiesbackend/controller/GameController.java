@@ -21,8 +21,8 @@ public class GameController {
 
     @GetMapping
     @PermitAll
-    public ResponseEntity<List<Game>> findAllGames() {
-        return ResponseEntity.ok(games.findAll());
+    public ResponseEntity<Response<List<Game>>> findAllGames() {
+        return ResponseEntity.ok(new Response<>(games.findAll()));
     }
 
     @SneakyThrows
