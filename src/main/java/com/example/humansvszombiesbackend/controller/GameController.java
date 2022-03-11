@@ -8,6 +8,8 @@ import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.List;
 
@@ -18,12 +20,14 @@ public class GameController {
     private final GameRepository games;
 
     @GetMapping
+    @PermitAll
     public ResponseEntity<List<Game>> findAllGames() {
         return ResponseEntity.ok(games.findAll());
     }
 
     @SneakyThrows
     @PostMapping
+    @RolesAllowed("admin")
     public ResponseEntity<Response<Game>> saveGame(
             @RequestBody(required = false) Game game
     ) {
