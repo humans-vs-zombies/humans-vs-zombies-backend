@@ -20,7 +20,7 @@ public class UserController {
 
         return ResponseEntity.ok(new Response<>(
                 UserDTO.builder()
-                        .id(identity.getId())
+                        .id(UUID.fromString(identity.getId()))
                         .firstName(identity.getGivenName())
                         .lastName(identity.getFamilyName())
                         .build()
