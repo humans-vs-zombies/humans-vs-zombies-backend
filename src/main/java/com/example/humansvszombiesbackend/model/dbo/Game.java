@@ -4,6 +4,8 @@ import com.example.humansvszombiesbackend.enums.GameState;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,4 +24,8 @@ public class Game {
     @Builder.Default
     @Column(nullable = false)
     private GameState state = GameState.CONFIGURATION;
+
+    @OneToMany
+    @JoinColumn(nullable = false)
+    private Set<Player> players = new LinkedHashSet<>();
 }
