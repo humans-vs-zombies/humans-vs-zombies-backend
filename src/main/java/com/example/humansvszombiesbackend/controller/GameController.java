@@ -35,7 +35,8 @@ public class GameController {
     @PostMapping
     @RolesAllowed("admin")
     public ResponseEntity<Response<Game>> saveGame(
-            @RequestBody(required = false) Game game
+            @RequestBody(required = false) Game game,
+            @RequestHeader String Authorization
     ) {
         if (game == null) {
             return ResponseEntity.badRequest()
