@@ -21,6 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/game")
 public class GameController {
+
     private final GameRepository games;
     private final GamePlayerService gamePlayers;
 
@@ -36,7 +37,7 @@ public class GameController {
     public ResponseEntity<Response<Game>> saveGame(
             @RequestBody(required = false) Game game
     ) {
-        if(game == null) {
+        if (game == null) {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid game object supplied"));
         }
@@ -47,6 +48,7 @@ public class GameController {
     }
 
     @PostMapping("join/{gameId}")
+    @PermitAll
     public ResponseEntity<Response<Player>> joinGame(
             KeycloakAuthenticationToken keycloakToken,
             @PathVariable Integer gameId
@@ -57,4 +59,5 @@ public class GameController {
             return ResponseEntity.ok(response);
         return ResponseEntity.badRequest().body(response);
     }
+
 }
