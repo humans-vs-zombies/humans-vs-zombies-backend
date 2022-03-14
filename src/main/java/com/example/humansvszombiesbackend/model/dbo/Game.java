@@ -34,6 +34,10 @@ public class Game {
     @JoinColumn(nullable = false)
     private Set<Player> players = new LinkedHashSet<>();
 
+    @Builder.Default
+    @Column
+    private String description = null;
+  
     @JsonGetter
     public Set<PlayerDTO> players()
     {
@@ -44,4 +48,5 @@ public class Game {
                 .build()
         ).collect(Collectors.toSet());
     }
+
 }

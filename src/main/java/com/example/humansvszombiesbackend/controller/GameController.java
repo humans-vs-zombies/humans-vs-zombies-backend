@@ -11,7 +11,8 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -24,12 +25,14 @@ public class GameController {
     private final GamePlayerService gamePlayers;
 
     @GetMapping
-    public ResponseEntity<List<Game>> findAllGames() {
-        return ResponseEntity.ok(games.findAll());
+    @PermitAll
+    public ResponseEntity<Response<List<Game>>> findAllGames() {
+        return ResponseEntity.ok(new Response<>(games.findAll()));
     }
 
     @SneakyThrows
     @PostMapping
+    @RolesAllowed("admin")
     public ResponseEntity<Response<Game>> saveGame(
             @RequestBody(required = false) Game game
     ) {
