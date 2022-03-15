@@ -7,8 +7,11 @@ import com.example.humansvszombiesbackend.repository.GameRepository;
 import com.example.humansvszombiesbackend.service.GamePlayerService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
@@ -35,9 +38,9 @@ public class GameController {
     @PostMapping
     @RolesAllowed("admin")
     public ResponseEntity<Response<Game>> saveGame(
-            @RequestBody(required = false) Game game,
-            @RequestHeader String Authorization
+            @RequestBody(required = false) Game game
     ) {
+
         if (game == null) {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid game object supplied"));
@@ -49,16 +52,15 @@ public class GameController {
     }
 
     @PostMapping("join/{gameId}")
-    @PermitAll
+    @RolesAllowed({"admin", "user"})
     public ResponseEntity<Response<Player>> joinGame(
-            KeycloakAuthenticationToken keycloakToken,
-            @PathVariable Integer gameId
+            @PathVariable Integer gameId,
+            KeycloakAuthenticationToken keycloakAuthToken
     ) {
-        UUID userId = UUID.fromString(keycloakToken.getAccount().getKeycloakSecurityContext().getIdToken().getId());
+        UUID userId = UUID.fromString(keycloakAuthToken.getAccount().getKeycloakSecurityContext().getToken().getId());
         Response<Player> response = gamePlayers.createPlayer(gameId, userId);
         if (response.isSuccess())
             return ResponseEntity.ok(response);
         return ResponseEntity.badRequest().body(response);
     }
-
 }
