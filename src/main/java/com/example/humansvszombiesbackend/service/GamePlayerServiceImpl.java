@@ -30,7 +30,7 @@ public class GamePlayerServiceImpl implements GamePlayerService {
                     Player player = Player.builder()
                             .userId(userId)
                             .currentGame(game)
-                            .biteCode(biteCodes.generate())
+                            .biteCode(biteCodes.generate(game.getId()))
                             .build();
 
                     game.getPlayers().add(player);
