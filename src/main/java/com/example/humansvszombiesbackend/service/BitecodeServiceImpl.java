@@ -22,10 +22,12 @@ public class BitecodeServiceImpl implements BiteCodeService {
     public String generate(Integer gameId) {
         Game game = games.getById(gameId);
 
-        String biteCode = "";
+        String biteCode = null;
         boolean unique = false;
 
         while(!unique) {
+            biteCode = "";
+
             // Generate random bite code
             for(int i = 0; i < BITE_CODE_LENGTH; i++) {
                 biteCode += CHARACTERS.charAt(random.nextInt(CHARACTERS.length()));
