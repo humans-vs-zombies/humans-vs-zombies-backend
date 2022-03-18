@@ -19,8 +19,9 @@ public class SwaggerBearerConfig {
     private static final String SCHEME = "bearer";
 
     @Bean
-    OpenAPI customOpenApi() {
+    OpenAPI customOpenApi(ApiInfoProvider infoProvider) {
         return new OpenAPI()
+                .info(infoProvider.provide())
                 .components(new Components()
                         .addSecuritySchemes(SCHEME_NAME, createBearerScheme()))
                 .addSecurityItem(new SecurityRequirement().addList(SCHEME_NAME));
