@@ -6,15 +6,20 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication
 // TODO: Configure CORS
 @CrossOrigin("*")
 @RestController
-@SecurityScheme(name = "humans-vs-zombies", openIdConnectUrl = "https://humans-vs-zombies-keycloak.herokuapp.com/auth/realms/humans-vs-zombies/.well-known/openid-configuration", type = SecuritySchemeType.OPENIDCONNECT, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "openId", openIdConnectUrl = "https://humans-vs-zombies-keycloak.herokuapp.com/auth/realms/humans-vs-zombies/.well-known/openid-configuration", type = SecuritySchemeType.OPENIDCONNECT, in = SecuritySchemeIn.HEADER)
+@ConfigurationPropertiesScan
+@EnableConfigurationProperties
 public class HumansVsZombiesBackendApplication {
 
     @GetMapping("test")
