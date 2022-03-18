@@ -23,7 +23,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new Response<>("User is not authenticated"));
 
-        IDToken identity = keycloakToken.getAccount().getKeycloakSecurityContext().getIdToken();
+        IDToken identity = keycloakToken.getAccount().getKeycloakSecurityContext().getToken();
 
         return ResponseEntity.ok(new Response<>(
                 UserDTO.builder()
@@ -36,7 +36,6 @@ public class UserController {
 
     @GetMapping("token")
     public ResponseEntity<Response<String>> getToken(KeycloakAuthenticationToken keycloakToken) {
-
         if (keycloakToken == null || !keycloakToken.isAuthenticated())
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new Response<>("User is not authenticated"));
