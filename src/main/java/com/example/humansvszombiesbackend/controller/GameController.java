@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@SecurityRequirement(name = "openId")
 @RestController
+@SecurityRequirement(name = "openId")
 @RequestMapping("/api/v1/game")
 public class GameController {
 

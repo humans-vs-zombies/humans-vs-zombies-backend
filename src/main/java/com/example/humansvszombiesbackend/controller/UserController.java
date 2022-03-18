@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.UUID;
 
 @RestController
@@ -47,4 +48,19 @@ public class UserController {
         ));
     }
 
+    // Test endpoint (temporary)
+    @GetMapping("/isAdmin")
+    @RolesAllowed("admin")
+    public ResponseEntity<Response<String>> adminEndpoint()
+    {
+        return ResponseEntity.ok(new Response<>("User is 'admin'", true));
+    }
+
+    // Test endpoint (temporary)
+    @GetMapping("/isUser")
+    @RolesAllowed("user")
+    public ResponseEntity<Response<String>> userEndpoint()
+    {
+        return ResponseEntity.ok(new Response<>("User is 'user'", true));
+    }
 }
