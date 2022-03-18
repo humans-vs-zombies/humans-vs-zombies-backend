@@ -30,8 +30,6 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     public static void configureApiSecurity(HttpSecurity http) throws Exception {
         http
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
                 .authorizeRequests()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
                 .anyRequest().permitAll();
@@ -41,6 +39,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         configureApiSecurity(http);
+        http.csrf().disable();
     }
 
     @Autowired
