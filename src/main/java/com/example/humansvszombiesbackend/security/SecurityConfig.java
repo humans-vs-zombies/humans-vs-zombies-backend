@@ -23,6 +23,21 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
+    private static final String[] SWAGGER_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+    };
+
+    public static void configureApiSecurity(HttpSecurity http) throws Exception {
+        http
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
+                .authorizeRequests()
+                .antMatchers(SWAGGER_WHITELIST).permitAll()
+                .anyRequest().permitAll();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
