@@ -5,6 +5,7 @@ import com.example.humansvszombiesbackend.model.dbo.Player;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.repository.GameRepository;
 import com.example.humansvszombiesbackend.service.GamePlayerService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+@SecurityRequirement(name = "openId")
 @RestController
 @RequestMapping("/api/v1/game")
 public class GameController {

@@ -2,6 +2,7 @@ package com.example.humansvszombiesbackend.controller;
 
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.model.dto.UserDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.IDToken;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@SecurityRequirement(name = "openId")
 @RequestMapping("api/v1/user")
 public class UserController {
 
