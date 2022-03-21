@@ -4,7 +4,7 @@
 
  
 
-TODO: Fill out this long description.
+TODO: Fill out this long description..
 
 ## Table of Contents
 
