@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class PlayerController {
     private final PlayerRepository players;
 
     @GetMapping
-    public ResponseEntity<Response<List<?>>> findAllPlayers(KeycloakAuthenticationToken token)
-    {
+    @RolesAllowed({"user", "admin"})
+    public ResponseEntity<Response<List<?>>> findAllPlayers(KeycloakAuthenticationToken token) {
         if (token != null && token.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_admin")))
             return ResponseEntity.ok(new Response<>(players.findAll()));
@@ -33,11 +34,11 @@ public class PlayerController {
     }
 
     @GetMapping("{id}")
+    @RolesAllowed({"user", "admin"})
     public ResponseEntity<Response<Object>> findPlayer(
             @PathVariable Integer id,
             KeycloakAuthenticationToken token
-    )
-    {
+    ) {
         return players.findById(id)
                 .map(player -> // Player found
                         ResponseEntity.ok(new Response<>(
@@ -52,5 +53,4 @@ public class PlayerController {
                                 .body(new Response<>("Player not found"))
                 );
     }
-
 }

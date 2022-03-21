@@ -75,4 +75,20 @@ public class GameController {
             return ResponseEntity.ok(response);
         return ResponseEntity.badRequest().body(response);
     }
+
+    @PutMapping("{gameId}/player/{playerId}")
+    @RolesAllowed({"admin"})
+    public ResponseEntity<Response<Player>> updatePlayer(
+            @PathVariable Integer gameId,
+            @PathVariable Integer playerId,
+            @RequestBody Player updatedPlayer
+    ) {
+        return gamePlayers.findPlayer(gameId, playerId)
+                .map( // Player found
+                        foundPlayer -> ResponseEntity.ok(gamePlayers.updatePlayer(playerId, updatedPlayer)))
+                .orElse( // Player not found within foundGame
+                        ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(new Response<>("Player with id " + playerId + " not found in game " + gameId)));
+    }
+
 }
