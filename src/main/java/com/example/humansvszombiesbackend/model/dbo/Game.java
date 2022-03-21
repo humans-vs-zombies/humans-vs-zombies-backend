@@ -29,6 +29,10 @@ public class Game {
     @Column(nullable = false)
     private GameState state = GameState.CONFIGURATION;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Integer participants = 25;
+
     @JsonIgnore
     @OneToMany
     @JoinColumn(nullable = false)
