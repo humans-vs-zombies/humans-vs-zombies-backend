@@ -44,7 +44,7 @@ public class Game {
         return players.stream().map(p -> PlayerDTO.builder()
                 .id(p.getId())
                 .isHuman(p.isHuman())
-                .biteCode(p.getBiteCode())
+                .userId(p.getUserId())
                 .build()
         ).collect(Collectors.toSet());
     }
