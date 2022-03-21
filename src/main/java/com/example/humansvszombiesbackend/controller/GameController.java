@@ -60,7 +60,14 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Game with the specified id was not found"));
         }
-        return null;
+        else {
+            game.setId(id);
+
+            Game patchedGame = games.save(game);
+
+            return ResponseEntity.accepted()
+                    .body(new Response<>(patchedGame));
+        }
     }
 
     @SneakyThrows
