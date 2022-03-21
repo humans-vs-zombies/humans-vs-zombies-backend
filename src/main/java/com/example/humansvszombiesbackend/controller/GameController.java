@@ -56,6 +56,10 @@ public class GameController {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid game object supplied"));
         }
+        else if (!games.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Game with the specified id was not found"));
+        }
         return null;
     }
 
