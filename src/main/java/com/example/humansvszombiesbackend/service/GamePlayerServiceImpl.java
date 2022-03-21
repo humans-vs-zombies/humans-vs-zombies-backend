@@ -20,7 +20,7 @@ public class GamePlayerServiceImpl implements GamePlayerService {
     private final BiteCodeService biteCodes;
 
     @Override
-    public Response<Player> createPlayer(Integer gameId, UUID userId) {
+    public Response<Player> createPlayer(Integer gameId, UUID userId, String name) {
         return games.findById(gameId).map(
                 game -> {
                     boolean duplicate = game.getPlayers().stream()
@@ -31,6 +31,7 @@ public class GamePlayerServiceImpl implements GamePlayerService {
 
                     Player player = Player.builder()
                             .userId(userId)
+                            .name(name)
                             .currentGame(game)
                             .biteCode(biteCodes.generate(game.getId()))
                             .build();

@@ -12,6 +12,8 @@ public class PlayerDTO {
 
     private Integer id;
 
+    private String name;
+
     private boolean isHuman;
 
     private UUID userId;
@@ -19,6 +21,7 @@ public class PlayerDTO {
     public static PlayerDTO from(Player player) {
         return builder()
                 .id(player.getId())
+                .name(player.getName())
                 .isHuman(player.isHuman())
                 .userId(player.getUserId())
                 .build();

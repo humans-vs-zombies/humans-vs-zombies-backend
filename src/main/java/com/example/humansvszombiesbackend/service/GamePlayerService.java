@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface GamePlayerService {
 
-    Response<Player> createPlayer(Integer gameId, UUID userId);
+    Response<Player> createPlayer(Integer gameId, UUID userId, String name);
 
     Response<Player> updatePlayer(Integer playerId, Player player);
 
