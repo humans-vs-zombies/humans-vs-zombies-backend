@@ -37,13 +37,26 @@ public class GameController {
             @RequestParam(required = false, value = "limit") Integer limit,
             @RequestParam(required = false, value = "offset") Integer offset
     ) {
-        if (limit != null && offset != null) {
-            Pageable pageable = PageRequest.of(offset,limit);
-            return ResponseEntity.ok(new Response<>(games.findAll(pageable).getContent()));
-        }
-        else {
+        if (limit == null && offset == null) {
             return ResponseEntity.ok(new Response<>(games.findAll()));
         }
+
+        if (limit == null) {
+            limit = 1;
+        }
+        else {
+            limit = limit >= 1 ? limit : 1;
+        }
+
+        if (offset == null) {
+            offset = 0;
+        }
+        else {
+            offset = offset >= 0 ? offset : 0;
+        }
+
+        Pageable pageable = PageRequest.of(offset,limit);
+        return ResponseEntity.ok(new Response<>(games.findAll(pageable).getContent()));
     }
 
     @GetMapping("{id}")
