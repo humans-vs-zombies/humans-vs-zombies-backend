@@ -47,6 +47,30 @@ public class GameController {
                 );
     }
 
+    @PutMapping("{id}")
+    @RolesAllowed("admin")
+    public ResponseEntity<Response<Game>> updateGame(
+            @PathVariable Integer id,
+            @RequestBody(required = false) Game game
+    ){
+        if (game == null) {
+            return ResponseEntity.badRequest()
+                    .body(new Response<>("Invalid game object supplied"));
+        }
+        else if (!games.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Game with the specified id was not found"));
+        }
+        else {
+            game.setId(id);
+
+            Game patchedGame = games.save(game);
+
+            return ResponseEntity.accepted()
+                    .body(new Response<>(patchedGame));
+        }
+    }
+
     @SneakyThrows
     @PostMapping
     @RolesAllowed("admin")
