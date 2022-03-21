@@ -50,7 +50,7 @@ public class GameController {
         return ResponseEntity.created(uri).body(new Response<>(savedGame));
     }
 
-    @PostMapping("game/{gameId}/player")
+    @PostMapping("{gameId}/player")
     @RolesAllowed({"admin", "user"})
     public ResponseEntity<Response<Player>> joinGame(
             @PathVariable Integer gameId,
