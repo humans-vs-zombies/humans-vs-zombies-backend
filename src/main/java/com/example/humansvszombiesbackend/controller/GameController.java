@@ -71,7 +71,7 @@ public class GameController {
             KeycloakAuthenticationToken keycloakAuthToken
     ) {
         AccessToken token = keycloakAuthToken.getAccount().getKeycloakSecurityContext().getToken();
-        Response<Player> response = gamePlayers.createPlayer(gameId, UUID.fromString(token.getId()), token.getName());
+        Response<Player> response = gamePlayers.createPlayer(gameId, UUID.fromString(token.getSubject()), token.getName());
         if (response.isSuccess())
             return ResponseEntity.ok(response);
         return ResponseEntity.badRequest().body(response);
