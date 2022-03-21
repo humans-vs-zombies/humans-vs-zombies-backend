@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,18 @@ public class GameController {
     @PermitAll
     public ResponseEntity<Response<List<Game>>> findAllGames() {
         return ResponseEntity.ok(new Response<>(games.findAll()));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Response<Game>> findGame(@PathVariable Integer id)
+    {
+        return games.findById(id)
+                .map(game -> // Game found
+                        ResponseEntity.ok(new Response<>(game))
+                ).orElse( // Game not found
+                        ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(new Response<>("Game not found"))
+                );
     }
 
     @SneakyThrows
