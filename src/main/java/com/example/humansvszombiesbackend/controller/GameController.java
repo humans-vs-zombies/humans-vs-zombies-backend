@@ -66,7 +66,7 @@ public class GameController {
 
     @PostMapping("{gameId}/player")
     @RolesAllowed({"admin", "user"})
-    public ResponseEntity<Response<Player>> joinGame(
+    public ResponseEntity<Response<Player>> createPlayer(
             @PathVariable Integer gameId,
             KeycloakAuthenticationToken keycloakAuthToken
     ) {
