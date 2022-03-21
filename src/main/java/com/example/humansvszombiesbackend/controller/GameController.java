@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +33,17 @@ public class GameController {
 
     @GetMapping
     @PermitAll
-    public ResponseEntity<Response<List<Game>>> findAllGames() {
-        return ResponseEntity.ok(new Response<>(games.findAll()));
+    public ResponseEntity<Response<List<Game>>> findAllGames(
+            @RequestParam(required = false, value = "limit") Integer limit,
+            @RequestParam(required = false, value = "offset") Integer offset
+    ) {
+        if (limit != null && offset != null) {
+            Pageable pageable = PageRequest.of(offset,limit);
+            return ResponseEntity.ok(new Response<>(games.findAll(pageable).getContent()));
+        }
+        else {
+            return ResponseEntity.ok(new Response<>(games.findAll()));
+        }
     }
 
     @GetMapping("{id}")
