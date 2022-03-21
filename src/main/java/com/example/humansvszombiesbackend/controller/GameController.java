@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,8 +70,8 @@ public class GameController {
             @PathVariable Integer gameId,
             KeycloakAuthenticationToken keycloakAuthToken
     ) {
-        UUID userId = UUID.fromString(keycloakAuthToken.getAccount().getKeycloakSecurityContext().getToken().getId());
-        Response<Player> response = gamePlayers.createPlayer(gameId, userId);
+        AccessToken token = keycloakAuthToken.getAccount().getKeycloakSecurityContext().getToken();
+        Response<Player> response = gamePlayers.createPlayer(gameId, UUID.fromString(token.getId()), token.getName());
         if (response.isSuccess())
             return ResponseEntity.ok(response);
         return ResponseEntity.badRequest().body(response);

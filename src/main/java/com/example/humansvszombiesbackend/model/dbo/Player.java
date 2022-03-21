@@ -20,6 +20,9 @@ public class Player {
     private Integer id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     @Builder.Default
     private boolean isHuman = true;
 
