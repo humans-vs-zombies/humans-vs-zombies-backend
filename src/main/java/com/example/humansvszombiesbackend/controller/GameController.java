@@ -46,6 +46,19 @@ public class GameController {
                 );
     }
 
+    @PutMapping("{id}")
+    @RolesAllowed("admin")
+    public ResponseEntity<Response<Game>> updateGame(
+            @PathVariable Integer id,
+            @RequestBody(required = false) Game game
+    ){
+        if (game == null) {
+            return ResponseEntity.badRequest()
+                    .body(new Response<>("Invalid game object supplied"));
+        }
+        return null;
+    }
+
     @SneakyThrows
     @PostMapping
     @RolesAllowed("admin")
