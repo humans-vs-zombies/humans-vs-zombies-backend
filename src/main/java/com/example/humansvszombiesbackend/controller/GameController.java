@@ -86,7 +86,13 @@ public class GameController {
     ) {
         return gamePlayers.findPlayer(gameId, playerId)
                 .map( // Player found
-                        foundPlayer -> ResponseEntity.ok(gamePlayers.updatePlayer(playerId, updatedPlayer)))
+                        foundPlayer -> {
+                            foundPlayer.setName(updatedPlayer.getName());
+                            foundPlayer.setBiteCode(updatedPlayer.getBiteCode());
+                            foundPlayer.setHuman(updatedPlayer.isHuman());
+                            foundPlayer.setName(updatedPlayer.getName());
+                            return ResponseEntity.ok(gamePlayers.updatePlayer(playerId, foundPlayer));
+                        })
                 .orElse( // Player not found within foundGame
                         ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(new Response<>("Player with id " + playerId + " not found in game " + gameId)));
