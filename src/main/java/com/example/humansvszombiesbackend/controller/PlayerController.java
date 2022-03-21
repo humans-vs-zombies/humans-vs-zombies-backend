@@ -1,5 +1,6 @@
 package com.example.humansvszombiesbackend.controller;
 
+import com.example.humansvszombiesbackend.model.dbo.Player;
 import com.example.humansvszombiesbackend.model.dto.PlayerDTO;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.repository.PlayerRepository;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @SecurityRequirement(name = "openId")
-@RequestMapping("api/v1/player")
+@RequestMapping("api/v1/game/{gameId}/player")
 @RestController
 public class PlayerController {
 
@@ -26,20 +27,25 @@ public class PlayerController {
 
     @GetMapping
     @RolesAllowed({"user", "admin"})
-    public ResponseEntity<Response<List<?>>> findAllPlayers(KeycloakAuthenticationToken token) {
+    public ResponseEntity<Response<List<?>>> findAllPlayers(
+            @PathVariable Integer gameId,
+            KeycloakAuthenticationToken token) {
+        List<Player> playerList = this.players.findPlayersByCurrentGameId(gameId);
         if (token != null && token.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_admin")))
-            return ResponseEntity.ok(new Response<>(players.findAll()));
-        return ResponseEntity.ok(new Response<>(players.findAll().stream().map(PlayerDTO::from).toList()));
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_admin"))) {
+            return ResponseEntity.ok(new Response<>(playerList));
+        }
+        return ResponseEntity.ok(new Response<>(playerList.stream().map(PlayerDTO::from).toList()));
     }
 
     @GetMapping("{id}")
     @RolesAllowed({"user", "admin"})
     public ResponseEntity<Response<Object>> findPlayer(
+            @PathVariable Integer gameId,
             @PathVariable Integer id,
             KeycloakAuthenticationToken token
     ) {
-        return players.findById(id)
+        return players.findPlayersByCurrentGameIdAndId(gameId, id)
                 .map(player -> // Player found
                         ResponseEntity.ok(new Response<>(
                                 token != null && token.getAuthorities().stream()
@@ -53,4 +59,5 @@ public class PlayerController {
                                 .body(new Response<>("Player not found"))
                 );
     }
+
 }
