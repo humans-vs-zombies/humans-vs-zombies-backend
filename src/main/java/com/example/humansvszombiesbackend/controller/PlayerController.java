@@ -33,11 +33,20 @@ public class PlayerController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Response<Player>> findPlayer(@PathVariable Integer id)
+    public ResponseEntity<Response<Object>> findPlayer(
+            @PathVariable Integer id,
+            KeycloakAuthenticationToken token
+    )
     {
         return players.findById(id)
                 .map(player -> // Player found
-                        ResponseEntity.ok(new Response<>(player))
+                        ResponseEntity.ok(new Response<>(
+                                token != null && token.getAuthorities().stream()
+                                        .anyMatch(authority -> authority.getAuthority()
+                                                .equals("ROLE_admin"))
+                                        ? player // Admin, return complete object
+                                        : PlayerDTO.from(player) // not Admin, return DTO
+                        ))
                 ).orElse( // Player not found
                         ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(new Response<>("Player not found"))
