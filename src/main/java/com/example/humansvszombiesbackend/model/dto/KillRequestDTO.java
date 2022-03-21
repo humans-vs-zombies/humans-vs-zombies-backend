@@ -7,8 +7,6 @@ public class KillRequestDTO {
 
     private String biteCode;
 
-    private Integer victimId;
-
     private Integer killerId;
 
 }
