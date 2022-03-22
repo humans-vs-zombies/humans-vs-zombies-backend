@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
@@ -21,6 +18,13 @@ import java.util.List;
 @SecurityRequirement(name = "openId")
 @RequestMapping("api/v1/game/{gameId}/player")
 @RestController
+@CrossOrigin(
+        origins = {
+                "http://localhost:3000",
+                "https://humans-vs-zombies-frontend.herokuapp.com"
+        },
+        methods = {RequestMethod.GET, RequestMethod.OPTIONS}
+)
 public class PlayerController {
 
     private final PlayerRepository players;
