@@ -26,6 +26,13 @@ import java.util.UUID;
 @RestController
 @SecurityRequirement(name = "openId")
 @RequestMapping("/api/v1/game")
+@CrossOrigin(
+        origins = {
+                "http://localhost:3000",
+                "https://humans-vs-zombies-frontend.herokuapp.com"
+        },
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.OPTIONS}
+)
 public class GameController {
 
     private final GameRepository games;
