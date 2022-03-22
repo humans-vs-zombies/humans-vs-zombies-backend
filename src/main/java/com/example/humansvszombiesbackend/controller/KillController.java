@@ -31,6 +31,19 @@ public class KillController {
         return ResponseEntity.ok(new Response<>(kills.findAll()));
     }
 
+    @GetMapping("{killId}")
+    public ResponseEntity<Response<Kill>> findKill(
+            @PathVariable Integer gameId,
+            @PathVariable Integer killId
+    ) {
+        return kills.findByGameAndId(gameId, killId)
+                .map( // Kill found
+                        killFound -> ResponseEntity.ok(new Response<>(killFound))
+                ).orElse( // Not found
+                        ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(new Response<>("Kill not found")));
+    }
+
     @RolesAllowed({"admin"})
     @PostMapping("{biteCode}")
     public ResponseEntity<Response<Kill>> createKill(
