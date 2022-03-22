@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -24,6 +25,11 @@ public class KillController {
 
     private final PlayerRepository players;
     private final KillRepository kills;
+
+    @GetMapping
+    public ResponseEntity<Response<List<Kill>>> findKills(@PathVariable Integer gameId) {
+        return ResponseEntity.ok(new Response<>(kills.findAll()));
+    }
 
     @RolesAllowed({"admin"})
     @PostMapping("{biteCode}")
