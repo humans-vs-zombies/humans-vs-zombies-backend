@@ -140,4 +140,17 @@ public class GameController {
                                 .body(new Response<>("Player with id " + playerId + " not found in game " + gameId)));
     }
 
+    @DeleteMapping("{id}")
+    @RolesAllowed("admin")
+    public ResponseEntity<Response<Boolean>> deleteGame(
+            @PathVariable Integer id
+    ) {
+        if (!games.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Game with the specified id was not found"));
+        }
+
+        games.deleteById(id);
+        return ResponseEntity.accepted().body(new Response<>(true));
+    }
 }
