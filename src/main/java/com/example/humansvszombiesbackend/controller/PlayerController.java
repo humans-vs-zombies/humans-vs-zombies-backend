@@ -49,7 +49,7 @@ public class PlayerController {
             @PathVariable Integer id,
             KeycloakAuthenticationToken token
     ) {
-        return players.findPlayersByCurrentGameIdAndId(gameId, id)
+        return players.findPlayerByCurrentGameIdAndId(gameId, id)
                 .map(player -> // Player found
                         ResponseEntity.ok(new Response<>(
                                 token != null && token.getAuthorities().stream()

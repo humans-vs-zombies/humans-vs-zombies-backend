@@ -121,12 +121,12 @@ public class GameController {
 
     @PostMapping("{gameId}/player")
     @RolesAllowed({"admin", "user"})
-    public ResponseEntity<Response<Player>> joinGame(
+    public ResponseEntity<Response<Player>> createPlayer(
             @PathVariable Integer gameId,
             KeycloakAuthenticationToken keycloakAuthToken
     ) {
         AccessToken token = keycloakAuthToken.getAccount().getKeycloakSecurityContext().getToken();
-        Response<Player> response = gamePlayers.createPlayer(gameId, UUID.fromString(token.getId()), token.getName());
+        Response<Player> response = gamePlayers.createPlayer(gameId, UUID.fromString(token.getSubject()), token.getName());
         if (response.isSuccess())
             return ResponseEntity.ok(response);
         return ResponseEntity.badRequest().body(response);
@@ -141,7 +141,13 @@ public class GameController {
     ) {
         return gamePlayers.findPlayer(gameId, playerId)
                 .map( // Player found
-                        foundPlayer -> ResponseEntity.ok(gamePlayers.updatePlayer(playerId, updatedPlayer)))
+                        foundPlayer -> {
+                            foundPlayer.setName(updatedPlayer.getName());
+                            foundPlayer.setBiteCode(updatedPlayer.getBiteCode());
+                            foundPlayer.setHuman(updatedPlayer.isHuman());
+                            foundPlayer.setName(updatedPlayer.getName());
+                            return ResponseEntity.ok(gamePlayers.updatePlayer(playerId, foundPlayer));
+                        })
                 .orElse( // Player not found within foundGame
                         ResponseEntity.status(HttpStatus.NOT_FOUND)
                                 .body(new Response<>("Player with id " + playerId + " not found in game " + gameId)));
