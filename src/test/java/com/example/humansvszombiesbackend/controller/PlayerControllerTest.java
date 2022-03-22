@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,6 +33,23 @@ class PlayerControllerTest {
     void contextLoads() {
         assertNotNull(objectMapper);
         assertNotNull(mockMvc);
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void findAllPlayers_whenUser_returnsOk() {
+
+    }
+
+    @Test
+    @WithMockUser(roles = "admin")
+    void findAllPlayers_whenAdmin_returnsOk() {
+
+    }
+
+    @Test
+    void findAllPlayers_whenAnonymous_returnsUnauthorized() {
+
     }
 
 }
