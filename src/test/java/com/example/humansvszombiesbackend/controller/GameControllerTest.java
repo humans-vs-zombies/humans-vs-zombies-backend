@@ -65,6 +65,8 @@ class GameControllerTest {
         Game game = Game.builder()
                 .name("game_name")
                 .description("game_description")
+                .dateFrom(new Date())
+                .dateTo(new Date())
                 .build();
 
         assertThrows(NestedServletException.class, () -> mockMvc.perform(
