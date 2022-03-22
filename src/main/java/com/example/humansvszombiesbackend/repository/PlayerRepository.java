@@ -12,6 +12,8 @@ public interface PlayerRepository extends JpaRepository<Player, Integer> {
 
     List<Player> findPlayersByCurrentGameId(Integer id);
 
-    Optional<Player> findPlayersByCurrentGameIdAndId(Integer gameId, Integer id);
+    Optional<Player> findPlayerByCurrentGameIdAndId(Integer gameId, Integer id);
+
+    Optional<Player> findPlayerByCurrentGameIdAndBiteCode(Integer gameId, String biteCode);
 
 }

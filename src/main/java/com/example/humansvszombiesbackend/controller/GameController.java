@@ -1,10 +1,8 @@
 package com.example.humansvszombiesbackend.controller;
 
 import com.example.humansvszombiesbackend.model.dbo.Game;
-import com.example.humansvszombiesbackend.model.dbo.Player;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.repository.GameRepository;
-import com.example.humansvszombiesbackend.service.GamePlayerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,16 +18,21 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
 @SecurityRequirement(name = "openId")
 @RequestMapping("/api/v1/game")
+@CrossOrigin(
+        origins = {
+                "http://localhost:3000",
+                "https://humans-vs-zombies-frontend.herokuapp.com"
+        },
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.OPTIONS}
+)
 public class GameController {
 
     private final GameRepository games;
-    private final GamePlayerService gamePlayers;
 
     @GetMapping
     @PermitAll

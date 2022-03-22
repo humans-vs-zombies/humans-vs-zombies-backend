@@ -16,21 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableWebSecurity
 @SpringBootApplication
 // TODO: Configure CORS
-@CrossOrigin("*")
 @RestController
 @SecurityScheme(name = "openId", openIdConnectUrl = "https://humans-vs-zombies-keycloak.herokuapp.com/auth/realms/humans-vs-zombies/.well-known/openid-configuration", type = SecuritySchemeType.OPENIDCONNECT, in = SecuritySchemeIn.HEADER)
 @ConfigurationPropertiesScan
 @EnableConfigurationProperties
 public class HumansVsZombiesBackendApplication {
-
-    @GetMapping("test")
-    public String hello()
-    {
-        return "Hello world!";
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(HumansVsZombiesBackendApplication.class, args);
     }
-
 }

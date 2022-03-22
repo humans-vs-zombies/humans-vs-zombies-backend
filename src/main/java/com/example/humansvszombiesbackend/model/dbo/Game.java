@@ -41,7 +41,8 @@ public class Game {
     private Date dateTo;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Set<Player> players = new LinkedHashSet<>();
 
@@ -52,12 +53,7 @@ public class Game {
     @JsonGetter
     public Set<PlayerDTO> players()
     {
-        return players.stream().map(p -> PlayerDTO.builder()
-                .id(p.getId())
-                .isHuman(p.isHuman())
-                .userId(p.getUserId())
-                .build()
-        ).collect(Collectors.toSet());
+        return players.stream().map(PlayerDTO::from).collect(Collectors.toSet());
     }
 
 }
