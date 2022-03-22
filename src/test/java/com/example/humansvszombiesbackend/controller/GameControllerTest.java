@@ -1,6 +1,5 @@
 package com.example.humansvszombiesbackend.controller;
 
-import com.example.humansvszombiesbackend.enums.GameState;
 import com.example.humansvszombiesbackend.model.dbo.Game;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,8 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.NestedServletException;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -62,14 +61,16 @@ class GameControllerTest {
     @Test
     @WithMockUser(roles = {"user"})
     @Transactional
-    void saveGame_whenUser_ThrowsException() throws Exception {
-        Game game = new Game(0, "game_name", GameState.CONFIGURATION, Set.of(), "game_description");
-        String gameJson = objectMapper.writeValueAsString(game);
+    void saveGame_whenUser_ThrowsException() {
+        Game game = Game.builder()
+                .name("game_name")
+                .description("game_description")
+                .build();
 
         assertThrows(NestedServletException.class, () -> mockMvc.perform(
                 post(getRootUrl())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(gameJson)
+                        .content(objectMapper.writeValueAsString(game))
         ));
     }
 
@@ -80,6 +81,8 @@ class GameControllerTest {
         Game game = Game.builder()
                 .name("game_name")
                 .description("game_description")
+                .dateFrom(new Date())
+                .dateTo(new Date())
                 .build();
 
         String gameJson = objectMapper.writeValueAsString(game);
@@ -114,6 +117,8 @@ class GameControllerTest {
         Game game = Game.builder()
                 .name("game_name")
                 .description("game_description")
+                .dateFrom(new Date())
+                .dateTo(new Date())
                 .build();
 
         String saveResponse = mockMvc.perform(
@@ -138,6 +143,8 @@ class GameControllerTest {
         Game game = Game.builder()
                 .name("game_name")
                 .description("game_description")
+                .dateFrom(new Date())
+                .dateTo(new Date())
                 .build();
 
         String saveResponse = mockMvc.perform(
