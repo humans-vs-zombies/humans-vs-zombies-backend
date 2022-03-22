@@ -115,4 +115,45 @@ public class GameController {
         return ResponseEntity.created(uri).body(new Response<>(savedGame));
     }
 
+    @PostMapping("{gameId}/player")
+    @RolesAllowed({"admin", "user"})
+    public ResponseEntity<Response<Player>> joinGame(
+            @PathVariable Integer gameId,
+            KeycloakAuthenticationToken keycloakAuthToken
+    ) {
+        AccessToken token = keycloakAuthToken.getAccount().getKeycloakSecurityContext().getToken();
+        Response<Player> response = gamePlayers.createPlayer(gameId, UUID.fromString(token.getId()), token.getName());
+        if (response.isSuccess())
+            return ResponseEntity.ok(response);
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @PutMapping("{gameId}/player/{playerId}")
+    @RolesAllowed({"admin"})
+    public ResponseEntity<Response<Player>> updatePlayer(
+            @PathVariable Integer gameId,
+            @PathVariable Integer playerId,
+            @RequestBody Player updatedPlayer
+    ) {
+        return gamePlayers.findPlayer(gameId, playerId)
+                .map( // Player found
+                        foundPlayer -> ResponseEntity.ok(gamePlayers.updatePlayer(playerId, updatedPlayer)))
+                .orElse( // Player not found within foundGame
+                        ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(new Response<>("Player with id " + playerId + " not found in game " + gameId)));
+    }
+
+    @DeleteMapping("{id}")
+    @RolesAllowed("admin")
+    public ResponseEntity<Response<Boolean>> deleteGame(
+            @PathVariable Integer id
+    ) {
+        if (!games.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Game with the specified id was not found"));
+        }
+
+        games.deleteById(id);
+        return ResponseEntity.accepted().body(new Response<>(true));
+    }
 }

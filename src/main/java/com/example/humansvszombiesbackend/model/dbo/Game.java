@@ -42,7 +42,7 @@ public class Game {
 
     @JsonIgnore
     @Builder.Default
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Set<Player> players = new LinkedHashSet<>();
 
