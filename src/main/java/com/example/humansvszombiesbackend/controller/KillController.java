@@ -56,6 +56,10 @@ public class KillController {
                             .killer(killer.get())
                             .build();
 
+                    // Set victim to zombie
+                    victim.setHuman(false);
+                    players.save(victim);
+
                     return ResponseEntity.ok(new Response<>(kills.save(kill)));
                 })
                 .orElse( // Did not find victim
