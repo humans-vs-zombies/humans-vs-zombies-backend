@@ -45,7 +45,7 @@ public class KillController {
     }
 
     @RolesAllowed({"admin"})
-    @PostMapping("{biteCode}")
+    @PostMapping
     public ResponseEntity<Response<Kill>> createKill(
             @PathVariable Integer gameId,
             @RequestBody KillRequestDTO killRequest
