@@ -41,6 +41,7 @@ public class Game {
     private Date dateTo;
 
     @JsonIgnore
+    @Builder.Default
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(nullable = false)
     private Set<Player> players = new LinkedHashSet<>();

@@ -1,10 +1,8 @@
 package com.example.humansvszombiesbackend.controller;
 
 import com.example.humansvszombiesbackend.model.dbo.Game;
-import com.example.humansvszombiesbackend.model.dbo.Player;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.repository.GameRepository;
-import com.example.humansvszombiesbackend.service.GamePlayerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,7 +18,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,7 +33,6 @@ import java.util.UUID;
 public class GameController {
 
     private final GameRepository games;
-    private final GamePlayerService gamePlayers;
 
     @GetMapping
     @PermitAll
@@ -117,40 +113,6 @@ public class GameController {
         Game savedGame = games.save(game);
         URI uri = new URI("/api/v1/game/" + savedGame.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedGame));
-    }
-
-    @PostMapping("{gameId}/player")
-    @RolesAllowed({"admin", "user"})
-    public ResponseEntity<Response<Player>> createPlayer(
-            @PathVariable Integer gameId,
-            KeycloakAuthenticationToken keycloakAuthToken
-    ) {
-        AccessToken token = keycloakAuthToken.getAccount().getKeycloakSecurityContext().getToken();
-        Response<Player> response = gamePlayers.createPlayer(gameId, UUID.fromString(token.getSubject()), token.getName());
-        if (response.isSuccess())
-            return ResponseEntity.ok(response);
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    @PutMapping("{gameId}/player/{playerId}")
-    @RolesAllowed({"admin"})
-    public ResponseEntity<Response<Player>> updatePlayer(
-            @PathVariable Integer gameId,
-            @PathVariable Integer playerId,
-            @RequestBody Player updatedPlayer
-    ) {
-        return gamePlayers.findPlayer(gameId, playerId)
-                .map( // Player found
-                        foundPlayer -> {
-                            foundPlayer.setName(updatedPlayer.getName());
-                            foundPlayer.setBiteCode(updatedPlayer.getBiteCode());
-                            foundPlayer.setHuman(updatedPlayer.isHuman());
-                            foundPlayer.setName(updatedPlayer.getName());
-                            return ResponseEntity.ok(gamePlayers.updatePlayer(playerId, foundPlayer));
-                        })
-                .orElse( // Player not found within foundGame
-                        ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                .body(new Response<>("Player with id " + playerId + " not found in game " + gameId)));
     }
 
 }
