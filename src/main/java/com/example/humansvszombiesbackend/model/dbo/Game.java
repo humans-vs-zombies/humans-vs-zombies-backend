@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,6 +29,16 @@ public class Game {
     @Builder.Default
     @Column(nullable = false)
     private GameState state = GameState.CONFIGURATION;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Integer participants = 25;
+
+    @Column(nullable = false)
+    private Date dateFrom;
+
+    @Column(nullable = false)
+    private Date dateTo;
 
     @JsonIgnore
     @Builder.Default

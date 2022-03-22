@@ -7,9 +7,7 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.IDToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.UUID;
@@ -17,6 +15,13 @@ import java.util.UUID;
 @RestController
 @SecurityRequirement(name = "openId")
 @RequestMapping("api/v1/user")
+@CrossOrigin(
+        origins = {
+                "http://localhost:3000",
+                "https://humans-vs-zombies-frontend.herokuapp.com"
+        },
+        methods = {RequestMethod.GET, RequestMethod.OPTIONS}
+)
 public class UserController {
 
     @GetMapping
