@@ -28,7 +28,7 @@ public class KillController {
 
     @GetMapping
     public ResponseEntity<Response<List<Kill>>> findKills(@PathVariable Integer gameId) {
-        return ResponseEntity.ok(new Response<>(kills.findAll()));
+        return ResponseEntity.ok(new Response<>(kills.findByGameId(gameId)));
     }
 
     @GetMapping("{killId}")
