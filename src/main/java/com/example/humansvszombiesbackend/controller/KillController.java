@@ -36,7 +36,7 @@ public class KillController {
             @PathVariable Integer gameId,
             @PathVariable Integer killId
     ) {
-        return kills.findByGameAndId(gameId, killId)
+        return kills.findByGameIdAndId(gameId, killId)
                 .map( // Kill found
                         killFound -> ResponseEntity.ok(new Response<>(killFound))
                 ).orElse( // Not found
