@@ -62,7 +62,7 @@ public class PlayerController {
                 );
     }
 
-    @PostMapping("{gameId}/player")
+    @PostMapping
     @RolesAllowed({"admin", "user"})
     public ResponseEntity<Response<Player>> createPlayer(
             @PathVariable Integer gameId,
@@ -75,7 +75,7 @@ public class PlayerController {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @PutMapping("{gameId}/player/{playerId}")
+    @PutMapping("{playerId}")
     @RolesAllowed({"admin"})
     public ResponseEntity<Response<Player>> updatePlayer(
             @PathVariable Integer gameId,
