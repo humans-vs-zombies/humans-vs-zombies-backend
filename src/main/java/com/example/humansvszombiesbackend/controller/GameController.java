@@ -1,8 +1,10 @@
 package com.example.humansvszombiesbackend.controller;
 
+import com.example.humansvszombiesbackend.enums.GameState;
 import com.example.humansvszombiesbackend.model.dbo.Game;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.repository.GameRepository;
+import com.example.humansvszombiesbackend.service.GameStateService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.websocket.server.PathParam;
 import java.net.URI;
 import java.util.List;
 
@@ -31,6 +34,7 @@ import java.util.List;
 public class GameController {
 
     private final GameRepository games;
+    private final GameStateService gameStates;
 
     @GetMapping
     @PermitAll
@@ -125,5 +129,30 @@ public class GameController {
 
         games.deleteById(id);
         return ResponseEntity.accepted().body(new Response<>(true));
+    }
+
+    @PostMapping("{id}/next-state")
+    @RolesAllowed({"admin"})
+    public ResponseEntity<Response<GameState>> nextGameState(
+            @PathVariable Integer id
+    ) {
+        return games.findById(id).map(
+                game -> {
+                    GameState nextState = gameStates.nextState(game.getState());
+
+                    if (game.getState() == nextState)
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(new Response<GameState>("Game is in the final state"));
+
+                    game.setState(nextState);
+
+                    games.save(game);
+
+                    return ResponseEntity.ok(new Response<>(game.getState()));
+                }
+        ).orElse(
+                ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new Response<>("Game with the specified id was not found"))
+        );
     }
 }

@@ -18,11 +18,16 @@ public class GamePlayerServiceImpl implements GamePlayerService {
     private final GameRepository games;
     private final PlayerRepository players;
     private final BiteCodeService biteCodes;
+    private final GameStateService gameStates;
 
     @Override
     public Response<Player> createPlayer(Integer gameId, UUID userId, String name) {
         return games.findById(gameId).map(
                 game -> {
+
+                    if (!gameStates.isJoinable(game.getState()))
+                        return new Response<Player>("Game is not currently open for registration");
+
                     boolean duplicate = game.getPlayers().stream()
                             .anyMatch(player -> player.getUserId().equals(userId));
 
