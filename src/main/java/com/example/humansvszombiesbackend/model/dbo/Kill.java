@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Getter
@@ -20,7 +21,7 @@ public class Kill {
     private Integer id;
 
     @CreationTimestamp
-    private Timestamp timeOfDeath;
+    private Date timeOfDeath;
 
     @NotNull
     @ManyToOne(optional = false)
