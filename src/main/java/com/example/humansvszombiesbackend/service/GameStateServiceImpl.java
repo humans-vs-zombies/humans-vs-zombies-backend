@@ -14,4 +14,9 @@ public class GameStateServiceImpl implements GameStateService {
         return GameState.values()[currentState.ordinal() + 1];
     }
 
+    @Override
+    public Boolean isJoinable(GameState state) {
+        return GameState.REGISTRATION.equals(state);
+    }
+
 }

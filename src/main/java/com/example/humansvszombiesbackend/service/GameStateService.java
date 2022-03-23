@@ -6,4 +6,6 @@ public interface GameStateService {
 
     GameState nextState(GameState state);
 
+    Boolean isJoinable(GameState state);
+
 }
