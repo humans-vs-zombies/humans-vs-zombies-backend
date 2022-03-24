@@ -14,6 +14,7 @@ import java.util.List;
 public class Squad {
 
     @Id
+    @GeneratedValue
     private Integer id;
 
     @Column
