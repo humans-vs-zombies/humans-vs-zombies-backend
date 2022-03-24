@@ -134,11 +134,11 @@ public class SquadController {
     }
 
     @GetMapping("{squadId}/chat")
-    public ResponseEntity<Response<List<Chat>>> findAllChats(
+    public ResponseEntity<Response<List<Chat>>> findAllSquadChats(
             @PathVariable Integer gameId,
             @PathVariable Integer squadId
     ) {
-        return null;
+        return ResponseEntity.ok(new Response<>(chats.findAllByGameIdAndSquadId(gameId, squadId)));
     }
 
     @PostMapping("{squadId}/chat")
