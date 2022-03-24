@@ -68,9 +68,30 @@ public class SquadController {
     @PostMapping("{squadId}/join")
     public ResponseEntity<Response<Squad>> joinSquad(
             @PathVariable Integer gameId,
-            @PathVariable Integer squadId
+            @PathVariable Integer squadId,
+            @RequestBody Integer playerId
     ) {
-        return null;
+        Optional<SquadMember> squadMember = squadMembers.findByGameIdAndSquadIdAndPlayerId(gameId, squadId, playerId);
+
+        if (squadMember.isPresent())
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response<>("Player is already in a squad"));
+
+
+        return games.findById(gameId).map(
+                foundGame -> squads.findByGameIdAndId(gameId, squadId).map(
+                        foundSquad -> players.findPlayerByCurrentGameIdAndId(gameId, playerId).map(
+                                foundPlayer -> {
+                                    squadMembers.save(SquadMember.builder()
+                                            .squad(foundSquad)
+                                            .game(foundGame)
+                                            .player(foundPlayer)
+                                            .build());
+
+                                    return ResponseEntity.ok(new Response<>(squads.getById(foundSquad.getId())));
+                                }
+                        ).orElse(ResponseEntity.ok(new Response<Squad>("Player was not found")))
+                ).orElse(ResponseEntity.ok(new Response<Squad>("Squad was not found")))
+        ).orElse(ResponseEntity.ok(new Response<Squad>("Game was not found")));
     }
 
     @PutMapping("{squadId}")
