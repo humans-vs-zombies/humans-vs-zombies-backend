@@ -115,7 +115,10 @@ public class SquadController {
             @PathVariable Integer squadId,
             @RequestBody Squad squad
     ) {
-        return null;
+        return squads.findByGameIdAndId(gameId, squadId).map(foundSquad -> {
+            foundSquad.setName(squad.getName());
+            return ResponseEntity.ok(new Response<>(foundSquad));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Squad was not found")));
     }
 
     @DeleteMapping("{squadId}")
