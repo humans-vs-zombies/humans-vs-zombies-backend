@@ -1,12 +1,12 @@
 package com.example.humansvszombiesbackend.model.dbo;
 
+import com.example.humansvszombiesbackend.model.dto.PlayerDTO;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -18,6 +18,7 @@ import java.util.Date;
 public class Chat {
 
     @Id
+    @GeneratedValue
     private Integer id;
 
     @Column
