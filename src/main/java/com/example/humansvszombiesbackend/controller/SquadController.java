@@ -142,12 +142,27 @@ public class SquadController {
     }
 
     @PostMapping("{squadId}/chat")
-    public ResponseEntity<Response<Chat>> sendChat(
+    public ResponseEntity<Response<Chat>> sendSquadChat(
             @PathVariable Integer gameId,
             @PathVariable Integer squadId,
-            @RequestBody Chat chat
+            @RequestBody String message
     ) {
-        return null;
+        return games.findById(gameId).map(
+                foundGame ->
+                        squads.findByGameIdAndId(foundGame.getId(), squadId).map(
+                                foundSquad -> {
+                                    Chat createdChat = chats.save(Chat.builder()
+                                            .message(message)
+                                            .isHumanGlobal(false)
+                                            .isZombieGlobal(false)
+                                            .game(foundGame)
+                                            .squad(foundSquad)
+                                            .build());
+
+                                    return ResponseEntity.ok(new Response<>(createdChat));
+                                }
+                        ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Squad was not found")))
+        ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Game was not found")));
     }
 
     @GetMapping("{squadId}/check-in")
