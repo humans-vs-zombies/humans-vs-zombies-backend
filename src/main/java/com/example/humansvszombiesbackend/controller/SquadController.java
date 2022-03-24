@@ -23,6 +23,9 @@ public class SquadController {
     private final GameRepository games;
     private final SquadRepository squads;
     private final PlayerRepository players;
+    private final ChatRepository chats;
+    private final SquadCheckInRepository squadCheckIns;
+    private final SquadMemberRepository squadMembers;
 
     @GetMapping
     public ResponseEntity<Response<List<Squad>>> findAllSquads(
