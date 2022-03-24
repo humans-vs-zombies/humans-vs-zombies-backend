@@ -2,10 +2,7 @@ package com.example.humansvszombiesbackend.model.dbo;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Getter
