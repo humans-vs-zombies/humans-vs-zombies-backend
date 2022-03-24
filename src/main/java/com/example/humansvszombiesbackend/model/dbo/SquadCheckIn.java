@@ -17,6 +17,7 @@ import java.sql.Date;
 public class SquadCheckIn {
 
     @Id
+    @GeneratedValue
     private Integer id;
 
     @Column
