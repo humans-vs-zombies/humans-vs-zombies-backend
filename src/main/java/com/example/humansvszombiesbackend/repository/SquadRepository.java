@@ -10,4 +10,5 @@ public interface SquadRepository extends JpaRepository<Squad, Integer> {
     List<Squad> findAllByGameId(Integer gameId);
 
     Optional<Squad> findByGameIdAndId(Integer gameId, Integer squadId);
+
 }
