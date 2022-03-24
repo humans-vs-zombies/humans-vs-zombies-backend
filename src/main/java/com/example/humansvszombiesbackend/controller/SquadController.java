@@ -127,7 +127,10 @@ public class SquadController {
             @PathVariable Integer gameId,
             @PathVariable Integer squadId
     ) {
-        return null;
+        return squads.findByGameIdAndId(gameId, squadId).map(foundSquad -> {
+            squads.delete(foundSquad);
+            return ResponseEntity.ok(new Response<>(true));
+        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Squad was not found")));
     }
 
     @GetMapping("{squadId}/chat")
