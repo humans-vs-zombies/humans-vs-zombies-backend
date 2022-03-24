@@ -66,6 +66,14 @@ public class SquadController {
                 .game(game.get())
                 .isHuman(player.get().isHuman())
                 .build());
+
+        // Add current player to created squad
+        squadMembers.save(SquadMember.builder()
+                .game(game.get())
+                .player(player.get())
+                .squad(createdSquad)
+                .build());
+
         return ResponseEntity
                 .created(URI.create(String.format("api/v1/game/%d/squad/%d", gameId, createdSquad.getId())))
                 .body(new Response<>(createdSquad));
