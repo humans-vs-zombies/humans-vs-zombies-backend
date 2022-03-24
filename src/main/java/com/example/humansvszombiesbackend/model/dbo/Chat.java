@@ -33,13 +33,24 @@ public class Chat {
     @CreationTimestamp
     private Date chatTime;
 
+    @JsonIgnore
     @OneToOne
+    @JoinColumn(name = "game_id")
     private Game game;
 
+    @JsonIgnore
     @OneToOne
+    @JoinColumn(name = "player_id")
     private Player player;
 
+    @JsonIgnore
     @OneToOne
+    @JoinColumn(name = "squad_id")
     private Squad squad;
+
+    @JsonGetter
+    public PlayerDTO player() {
+        return PlayerDTO.from(player);
+    }
 
 }
