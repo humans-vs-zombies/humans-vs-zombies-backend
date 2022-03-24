@@ -179,7 +179,21 @@ public class SquadController {
             @PathVariable Integer squadId,
             @RequestBody SquadCheckIn checkIn
     ) {
-        return null;
+        return games.findById(gameId).map(
+                foundGame ->
+                        squads.findByGameIdAndId(foundGame.getId(), squadId).map(
+                                foundSquad -> {
+                                    SquadCheckIn createdCheckIn = squadCheckIns.save(SquadCheckIn.builder()
+                                            .game(foundGame)
+                                            .squad(foundSquad)
+                                            .startTime(checkIn.getStartTime())
+                                            .endTime(checkIn.getEndTime())
+                                            .build());
+
+                                    return ResponseEntity.ok(new Response<>(createdCheckIn));
+                                }
+                        ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Squad was not found")))
+        ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Game was not found")));
     }
 
 }
