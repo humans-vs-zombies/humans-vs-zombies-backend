@@ -170,7 +170,7 @@ public class SquadController {
             @PathVariable Integer gameId,
             @PathVariable Integer squadId
     ) {
-        return null;
+        return ResponseEntity.ok(new Response<>(squadCheckIns.findAllByGameIdAndSquadId(gameId, squadId)));
     }
 
     @PostMapping("{squadId}/check-in")
