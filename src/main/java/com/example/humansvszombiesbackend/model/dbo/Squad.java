@@ -2,10 +2,8 @@ package com.example.humansvszombiesbackend.model.dbo;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +23,10 @@ public class Squad {
     private Boolean isHuman;
 
     @OneToOne
+    @JoinColumn(name = "game_id")
     private Game game;
+
+    @OneToMany(mappedBy = "squad", cascade = {CascadeType.REMOVE})
+    private List<SquadMember> squadMembers;
 
 }
