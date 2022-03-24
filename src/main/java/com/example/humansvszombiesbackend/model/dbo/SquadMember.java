@@ -1,10 +1,11 @@
 package com.example.humansvszombiesbackend.model.dbo;
 
+import com.example.humansvszombiesbackend.model.dto.PlayerDTO;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
