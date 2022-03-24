@@ -15,15 +15,25 @@ import javax.persistence.OneToOne;
 public class SquadMember {
 
     @Id
+    @GeneratedValue
     private Integer id;
 
+    @JsonIgnore
     @OneToOne
     private Game game;
 
-    @OneToOne
+    @JsonIgnore
+    @ManyToOne
     private Squad squad;
 
+    @JsonIgnore
     @OneToOne
     private Player player;
+
+    @JsonGetter
+    public PlayerDTO player() {
+        return PlayerDTO.from(player);
+    }
+
 
 }
