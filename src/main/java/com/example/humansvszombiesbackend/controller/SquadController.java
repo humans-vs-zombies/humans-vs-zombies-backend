@@ -46,20 +46,23 @@ public class SquadController {
 
     @SneakyThrows
     @PostMapping
-    public ResponseEntity<Response<Squad>> saveSquad(
+    public ResponseEntity<Response<Squad>> createSquad(
             @PathVariable Integer gameId,
             @RequestBody SquadCreateDTO squadCreateDTO
     ) {
 
         Optional<Game> game = games.findById(gameId);
         Optional<Player> player = players.findById(squadCreateDTO.getPlayerId());
+        Optional<SquadMember> currentPlayerSquad = squadMembers.findByGameIdAndPlayerId(gameId, squadCreateDTO.getPlayerId());
 
+        if (currentPlayerSquad.isPresent())
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new Response<>("Player is already in a squad"));
 
         if (game.isEmpty() || player.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Game or player was not found"));
 
         Squad createdSquad = squads.save(Squad.builder()
-                .id(gameId)
+                .name(squadCreateDTO.getName())
                 .game(game.get())
                 .isHuman(player.get().isHuman())
                 .build());
