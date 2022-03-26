@@ -93,12 +93,7 @@ public class GameController {
     @GetMapping("/configuration")
     @RolesAllowed("admin")
     public ResponseEntity<Response<List<Game>>> findAllGamesWithStateConfiguration() {
-        List<Game> allGames = games.findAll();
-        List<Game> filteredGameList = allGames.stream()
-                .filter(game -> game.getState() == GameState.CONFIGURATION)
-                .distinct()
-                .toList();
-        return ResponseEntity.ok(new Response<>(filteredGameList));
+        return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(GameState.CONFIGURATION)));
     }
 
     @GetMapping("{id}")
