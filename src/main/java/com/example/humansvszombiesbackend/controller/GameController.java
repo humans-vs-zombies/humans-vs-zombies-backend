@@ -41,10 +41,27 @@ public class GameController {
     @PermitAll
     public ResponseEntity<Response<List<Game>>> findAllGames(
             @RequestParam(required = false, value = "limit") Integer limit,
-            @RequestParam(required = false, value = "offset") Integer offset
+            @RequestParam(required = false, value = "offset") Integer offset,
+            @RequestParam(required = false, value = "state") String selectedFilter
     ) {
         if (limit == null && offset == null) {
-            return ResponseEntity.ok(new Response<>(games.findAll()));
+            List<Game> allGames = games.findAll();
+            if (selectedFilter == null) {
+                return ResponseEntity.ok(new Response<>(allGames));
+            }
+            // Return games filtered by state
+            else {
+                GameState stateToFilter = switch (GameState.valueOf(selectedFilter)) {
+                    case IN_PROGRESS -> GameState.IN_PROGRESS;
+                    case COMPLETE -> GameState.COMPLETE;
+                    default -> GameState.REGISTRATION;
+                };
+                List<Game> filteredGameList = allGames.stream()
+                        .filter(game -> game.getState() == stateToFilter)
+                        .distinct()
+                        .toList();
+                return ResponseEntity.ok(new Response<>(filteredGameList));
+            }
         }
 
         if (limit == null) {
