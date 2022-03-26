@@ -40,42 +40,25 @@ public class GameController {
     @GetMapping
     @PermitAll
     public ResponseEntity<Response<List<Game>>> findAllGames(
-            @RequestParam(required = false, value = "limit") Integer limit,
-            @RequestParam(required = false, value = "offset") Integer offset,
+            @RequestParam Integer limit,
+            @RequestParam Integer offset,
             @RequestParam(required = false, value = "state") String selectedFilter
     ) {
-        if (limit == null && offset == null) {
-            if (selectedFilter == null) {
-                // Return all games (except configuration state)
-                return ResponseEntity.ok(new Response<>(games.findAllByStateNotOrderByStateAscDateFromAscNameAsc(GameState.CONFIGURATION)));
-            }
-            else {
-                // Return games filtered by state
-                GameState stateToFilter = switch (selectedFilter) {
-                    case "IN_PROGRESS" -> GameState.IN_PROGRESS;
-                    case "COMPLETE" -> GameState.COMPLETE;
-                    default -> GameState.REGISTRATION;
-                };
-                return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(stateToFilter)));
-            }
-        }
-
-        if (limit == null) {
-            limit = 1;
-        }
-        else {
-            limit = limit >= 1 ? limit : 1;
-        }
-
-        if (offset == null) {
-            offset = 0;
-        }
-        else {
-            offset = offset >= 0 ? offset : 0;
-        }
-
         Pageable pageable = PageRequest.of(offset,limit);
-        return ResponseEntity.ok(new Response<>(games.findAll(pageable).getContent()));
+
+        if (selectedFilter == null) {
+            // Return all games (except configuration state)
+            return ResponseEntity.ok(new Response<>(games.findAllByStateNotOrderByStateAscDateFromAscNameAsc(GameState.CONFIGURATION, pageable)));
+        }
+        else {
+            // Return games filtered by state
+            GameState stateToFilter = switch (selectedFilter) {
+                case "IN_PROGRESS" -> GameState.IN_PROGRESS;
+                case "COMPLETE" -> GameState.COMPLETE;
+                default -> GameState.REGISTRATION;
+            };
+            return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(stateToFilter)));
+        }
     }
 
     @GetMapping("/for-admin")
