@@ -44,6 +44,8 @@ public class GameController {
             @RequestParam Integer offset,
             @RequestParam(required = false, value = "state") String selectedFilter
     ) {
+        limit = limit < 1 ? 1 : limit;
+        offset = offset < 0 ? 0 : offset;
         Pageable pageable = PageRequest.of(offset,limit);
 
         if (selectedFilter == null) {
@@ -67,6 +69,8 @@ public class GameController {
             @RequestParam Integer limit,
             @RequestParam Integer offset
     ) {
+        limit = limit < 1 ? 1 : limit;
+        offset = offset < 0 ? 0 : offset;
         Pageable pageable = PageRequest.of(offset,limit);
         return ResponseEntity.ok(new Response<>(games.findAllByOrderByStateAscDateFromAscNameAsc(pageable)));
     }
@@ -77,6 +81,8 @@ public class GameController {
             @RequestParam Integer limit,
             @RequestParam Integer offset
     ) {
+        limit = limit < 1 ? 1 : limit;
+        offset = offset < 0 ? 0 : offset;
         Pageable pageable = PageRequest.of(offset,limit);
         return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(GameState.CONFIGURATION, pageable)));
     }
