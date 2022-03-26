@@ -1,6 +1,7 @@
 package com.example.humansvszombiesbackend.controller;
 
 import com.example.humansvszombiesbackend.model.dbo.*;
+import com.example.humansvszombiesbackend.model.dto.ChatCreateDTO;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.model.dto.SquadCreateDTO;
 import com.example.humansvszombiesbackend.repository.*;
@@ -147,22 +148,27 @@ public class SquadController {
     public ResponseEntity<Response<Chat>> sendSquadChat(
             @PathVariable Integer gameId,
             @PathVariable Integer squadId,
-            @RequestBody String message
-    ) {
+            @RequestBody ChatCreateDTO chatCreateDTO
+            ) {
         return games.findById(gameId).map(
                 foundGame ->
                         squads.findByGameIdAndId(foundGame.getId(), squadId).map(
-                                foundSquad -> {
-                                    Chat createdChat = chats.save(Chat.builder()
-                                            .message(message)
-                                            .isHumanGlobal(false)
-                                            .isZombieGlobal(false)
-                                            .game(foundGame)
-                                            .squad(foundSquad)
-                                            .build());
+                                foundSquad ->
+                                    players.findPlayerByCurrentGameIdAndId(gameId, chatCreateDTO.getPlayerId()).map(
+                                            foundPlayer -> {
 
-                                    return ResponseEntity.ok(new Response<>(createdChat));
-                                }
+                                                Chat createdChat = chats.save(Chat.builder()
+                                                        .player(foundPlayer)
+                                                        .message(chatCreateDTO.getMessage())
+                                                        .isHumanGlobal(false)
+                                                        .isZombieGlobal(false)
+                                                        .game(foundGame)
+                                                        .squad(foundSquad)
+                                                        .build());
+
+                                                return ResponseEntity.ok(new Response<>(createdChat));
+                                            }
+                                    ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Player was not found")))
                         ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Squad was not found")))
         ).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response<>("Game was not found")));
     }
