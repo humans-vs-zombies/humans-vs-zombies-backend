@@ -63,8 +63,12 @@ public class GameController {
 
     @GetMapping("/for-admin")
     @RolesAllowed("admin")
-    public ResponseEntity<Response<List<Game>>> findAllGamesForAdmin() {
-        return ResponseEntity.ok(new Response<>(games.findAllByOrderByStateAscDateFromAscNameAsc()));
+    public ResponseEntity<Response<List<Game>>> findAllGamesForAdmin(
+            @RequestParam Integer limit,
+            @RequestParam Integer offset
+    ) {
+        Pageable pageable = PageRequest.of(offset,limit);
+        return ResponseEntity.ok(new Response<>(games.findAllByOrderByStateAscDateFromAscNameAsc(pageable)));
     }
 
     @GetMapping("/configuration")
