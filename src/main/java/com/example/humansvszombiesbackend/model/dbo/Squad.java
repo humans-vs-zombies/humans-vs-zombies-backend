@@ -1,8 +1,11 @@
 package com.example.humansvszombiesbackend.model.dbo;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,9 +28,11 @@ public class Squad {
 
     @OneToOne
     @JoinColumn(name = "game_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Game game;
 
-    @OneToMany(mappedBy = "squad", cascade = {CascadeType.REMOVE})
-    private List<SquadMember> squadMembers;
+    @Builder.Default
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL)
+    private List<SquadMember> squadMembers = new ArrayList<>();
 
 }

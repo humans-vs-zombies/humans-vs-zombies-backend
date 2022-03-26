@@ -4,6 +4,8 @@ import com.example.humansvszombiesbackend.model.dto.PlayerDTO;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -29,6 +31,7 @@ public class SquadMember {
 
     @JsonIgnore
     @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Player player;
 
     @JsonGetter

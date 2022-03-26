@@ -2,6 +2,8 @@ package com.example.humansvszombiesbackend.model.dbo;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,8 +36,9 @@ public class Kill {
     private Player victim;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     @JoinColumn(name = "killer_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Player killer;
 
 }
