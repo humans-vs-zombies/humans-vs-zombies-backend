@@ -87,6 +87,12 @@ public class GameController {
         return ResponseEntity.ok(new Response<>(games.findAll(pageable).getContent()));
     }
 
+    @GetMapping("/for-admin")
+    @RolesAllowed("admin")
+    public ResponseEntity<Response<List<Game>>> findAllGamesForAdmin() {
+        return ResponseEntity.ok(new Response<>(games.findAll()));
+    }
+
     @GetMapping("/configuration")
     @RolesAllowed("admin")
     public ResponseEntity<Response<List<Game>>> findAllGamesWithStateConfiguration() {
