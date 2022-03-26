@@ -12,5 +12,5 @@ import java.util.List;
 public interface GameRepository extends JpaRepository<Game, Integer> {
     List<Game> findAllByOrderByStateAscDateFromAscNameAsc();
     List<Game> findAllByStateNotOrderByStateAscDateFromAscNameAsc(GameState gameState, Pageable pageable);
-    List<Game> findAllByStateEqualsOrderByDateFromAscNameAsc(GameState gameState);
+    List<Game> findAllByStateEqualsOrderByDateFromAscNameAsc(GameState gameState, Pageable pageable);
 }

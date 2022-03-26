@@ -57,7 +57,7 @@ public class GameController {
                 case "COMPLETE" -> GameState.COMPLETE;
                 default -> GameState.REGISTRATION;
             };
-            return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(stateToFilter)));
+            return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(stateToFilter, pageable)));
         }
     }
 
@@ -69,8 +69,12 @@ public class GameController {
 
     @GetMapping("/configuration")
     @RolesAllowed("admin")
-    public ResponseEntity<Response<List<Game>>> findAllGamesWithStateConfiguration() {
-        return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(GameState.CONFIGURATION)));
+    public ResponseEntity<Response<List<Game>>> findAllGamesWithStateConfiguration(
+            @RequestParam Integer limit,
+            @RequestParam Integer offset
+    ) {
+        Pageable pageable = PageRequest.of(offset,limit);
+        return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(GameState.CONFIGURATION, pageable)));
     }
 
     @GetMapping("{id}")
