@@ -90,7 +90,7 @@ public class GameController {
     @GetMapping("/for-admin")
     @RolesAllowed("admin")
     public ResponseEntity<Response<List<Game>>> findAllGamesForAdmin() {
-        return ResponseEntity.ok(new Response<>(games.findAll()));
+        return ResponseEntity.ok(new Response<>(games.findAllByOrderByStateAscDateFromAscNameAsc()));
     }
 
     @GetMapping("/configuration")
