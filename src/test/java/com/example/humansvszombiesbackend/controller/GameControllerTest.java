@@ -115,7 +115,7 @@ class GameControllerTest {
     @Test
     @WithMockUser(roles = {"admin"})
     @Transactional
-    void findAllGames_afterPostingGame_ShouldContain() throws Exception {
+    void findAllGamesForAdmin_afterPostingGame_ShouldContain() throws Exception {
         Game game = Game.builder()
                 .name("game_name")
                 .description("game_description")
@@ -133,7 +133,7 @@ class GameControllerTest {
         Game saveResponseGame = objectMapper.readValue(responseJson.get("payload").toString(), Game.class);
 
         mockMvc.perform(
-                get(getRootUrl())
+                get(getRootUrl() + "/for-admin")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(content().json(objectMapper.writeValueAsString(new Response<>(List.of(saveResponseGame)))));
     }
