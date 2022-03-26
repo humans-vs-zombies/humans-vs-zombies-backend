@@ -4,6 +4,7 @@ import com.example.humansvszombiesbackend.model.dbo.*;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.model.dto.SquadCreateDTO;
 import com.example.humansvszombiesbackend.repository.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
+@SecurityRequirement(name = "openId")
 @RequestMapping("api/v1/game/{gameId}/squad")
 public class SquadController {
 
@@ -76,7 +78,7 @@ public class SquadController {
 
         return ResponseEntity
                 .created(URI.create(String.format("api/v1/game/%d/squad/%d", gameId, createdSquad.getId())))
-                .body(new Response<>(createdSquad));
+                .body(new Response<>(squads.getById(createdSquad.getId())));
     }
 
     @PostMapping("{squadId}/join")
