@@ -45,15 +45,9 @@ public class GameController {
             @RequestParam(required = false, value = "state") String selectedFilter
     ) {
         if (limit == null && offset == null) {
-            List<Game> allGames = games.findAll();
-            List<Game> filteredGameList;
             if (selectedFilter == null) {
                 // Return all games (except configuration state)
-                filteredGameList = allGames.stream()
-                        .filter(game -> game.getState() != GameState.CONFIGURATION)
-                        .distinct()
-                        .toList();
-                return ResponseEntity.ok(new Response<>(filteredGameList));
+                return ResponseEntity.ok(new Response<>(games.findAllByStateNotOrderByStateAscDateFromAscNameAsc(GameState.CONFIGURATION)));
             }
             else {
                 // Return games filtered by state
