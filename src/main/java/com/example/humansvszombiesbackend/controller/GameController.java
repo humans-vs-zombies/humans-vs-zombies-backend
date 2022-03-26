@@ -46,22 +46,27 @@ public class GameController {
     ) {
         if (limit == null && offset == null) {
             List<Game> allGames = games.findAll();
+            List<Game> filteredGameList;
             if (selectedFilter == null) {
-                return ResponseEntity.ok(new Response<>(allGames));
+                // Return all games (except configuration state)
+                filteredGameList = allGames.stream()
+                        .filter(game -> game.getState() != GameState.CONFIGURATION)
+                        .distinct()
+                        .toList();
             }
-            // Return games filtered by state
             else {
+                // Return games filtered by state
                 GameState stateToFilter = switch (selectedFilter) {
                     case "IN_PROGRESS" -> GameState.IN_PROGRESS;
                     case "COMPLETE" -> GameState.COMPLETE;
                     default -> GameState.REGISTRATION;
                 };
-                List<Game> filteredGameList = allGames.stream()
+                filteredGameList = allGames.stream()
                         .filter(game -> game.getState() == stateToFilter)
                         .distinct()
                         .toList();
-                return ResponseEntity.ok(new Response<>(filteredGameList));
             }
+            return ResponseEntity.ok(new Response<>(filteredGameList));
         }
 
         if (limit == null) {
