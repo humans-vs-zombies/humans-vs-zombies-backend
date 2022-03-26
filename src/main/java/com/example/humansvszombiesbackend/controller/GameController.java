@@ -51,9 +51,9 @@ public class GameController {
             }
             // Return games filtered by state
             else {
-                GameState stateToFilter = switch (GameState.valueOf(selectedFilter)) {
-                    case IN_PROGRESS -> GameState.IN_PROGRESS;
-                    case COMPLETE -> GameState.COMPLETE;
+                GameState stateToFilter = switch (selectedFilter) {
+                    case "IN_PROGRESS" -> GameState.IN_PROGRESS;
+                    case "COMPLETE" -> GameState.COMPLETE;
                     default -> GameState.REGISTRATION;
                 };
                 List<Game> filteredGameList = allGames.stream()
