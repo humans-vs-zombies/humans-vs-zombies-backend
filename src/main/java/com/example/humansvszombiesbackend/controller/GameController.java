@@ -65,6 +65,17 @@ public class GameController {
         return ResponseEntity.ok(new Response<>(games.findAll(pageable).getContent()));
     }
 
+    @GetMapping("/configuration")
+    @RolesAllowed("admin")
+    public ResponseEntity<Response<List<Game>>> findAllGamesWithStateConfiguration() {
+        List<Game> allGames = games.findAll();
+        List<Game> filteredGameList = allGames.stream()
+                .filter(game -> game.getState() == GameState.CONFIGURATION)
+                .distinct()
+                .toList();
+        return ResponseEntity.ok(new Response<>(filteredGameList));
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Response<Game>> findGame(@PathVariable Integer id)
     {
