@@ -4,9 +4,12 @@ import com.example.humansvszombiesbackend.enums.GameState;
 import com.example.humansvszombiesbackend.model.dto.PlayerDTO;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,6 +26,7 @@ public class Game {
     @GeneratedValue
     private Integer id;
 
+    @NotBlank
     @Column(length = 40, nullable = false)
     private String name;
 
@@ -42,10 +46,11 @@ public class Game {
 
     @JsonIgnore
     @Builder.Default
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = false)
     private Set<Player> players = new LinkedHashSet<>();
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Builder.Default
     @Column
     private String description = null;

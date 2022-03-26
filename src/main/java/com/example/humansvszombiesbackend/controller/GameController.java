@@ -2,6 +2,7 @@ package com.example.humansvszombiesbackend.controller;
 
 import com.example.humansvszombiesbackend.enums.GameState;
 import com.example.humansvszombiesbackend.model.dbo.Game;
+import com.example.humansvszombiesbackend.model.dto.GameCreateDTO;
 import com.example.humansvszombiesbackend.model.dto.Response;
 import com.example.humansvszombiesbackend.repository.GameRepository;
 import com.example.humansvszombiesbackend.service.GameStateService;
@@ -104,7 +105,7 @@ public class GameController {
     @PostMapping
     @RolesAllowed("admin")
     public ResponseEntity<Response<Game>> saveGame(
-            @RequestBody(required = false) Game game
+            @RequestBody(required = false) GameCreateDTO game
     ) {
 
         if (game == null) {
@@ -112,7 +113,13 @@ public class GameController {
                     .body(new Response<>("Invalid game object supplied"));
         }
 
-        Game savedGame = games.save(game);
+        Game savedGame = games.save(Game.builder()
+                .name(game.getName())
+                        .participants(game.getParticipants())
+                        .dateFrom(game.getDateFrom())
+                        .dateTo(game.getDateTo())
+                        .description(game.getDescription())
+                .build());
         URI uri = new URI("/api/v1/game/" + savedGame.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedGame));
     }
