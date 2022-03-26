@@ -53,6 +53,7 @@ public class GameController {
                         .filter(game -> game.getState() != GameState.CONFIGURATION)
                         .distinct()
                         .toList();
+                return ResponseEntity.ok(new Response<>(filteredGameList));
             }
             else {
                 // Return games filtered by state
@@ -61,12 +62,8 @@ public class GameController {
                     case "COMPLETE" -> GameState.COMPLETE;
                     default -> GameState.REGISTRATION;
                 };
-                filteredGameList = allGames.stream()
-                        .filter(game -> game.getState() == stateToFilter)
-                        .distinct()
-                        .toList();
+                return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(stateToFilter)));
             }
-            return ResponseEntity.ok(new Response<>(filteredGameList));
         }
 
         if (limit == null) {
