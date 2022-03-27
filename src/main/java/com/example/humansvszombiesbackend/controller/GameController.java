@@ -40,68 +40,51 @@ public class GameController {
     @GetMapping
     @PermitAll
     public ResponseEntity<Response<List<Game>>> findAllGames(
-            @RequestParam(required = false, value = "limit") Integer limit,
-            @RequestParam(required = false, value = "offset") Integer offset,
+            @RequestParam Integer limit,
+            @RequestParam Integer offset,
             @RequestParam(required = false, value = "state") String selectedFilter
     ) {
-        if (limit == null && offset == null) {
-            List<Game> allGames = games.findAll();
-            List<Game> filteredGameList;
-            if (selectedFilter == null) {
-                // Return all games (except configuration state)
-                filteredGameList = allGames.stream()
-                        .filter(game -> game.getState() != GameState.CONFIGURATION)
-                        .distinct()
-                        .toList();
-            }
-            else {
-                // Return games filtered by state
-                GameState stateToFilter = switch (selectedFilter) {
-                    case "IN_PROGRESS" -> GameState.IN_PROGRESS;
-                    case "COMPLETE" -> GameState.COMPLETE;
-                    default -> GameState.REGISTRATION;
-                };
-                filteredGameList = allGames.stream()
-                        .filter(game -> game.getState() == stateToFilter)
-                        .distinct()
-                        .toList();
-            }
-            return ResponseEntity.ok(new Response<>(filteredGameList));
-        }
-
-        if (limit == null) {
-            limit = 1;
-        }
-        else {
-            limit = limit >= 1 ? limit : 1;
-        }
-
-        if (offset == null) {
-            offset = 0;
-        }
-        else {
-            offset = offset >= 0 ? offset : 0;
-        }
-
+        limit = limit < 1 ? 1 : limit;
+        offset = offset < 0 ? 0 : offset;
         Pageable pageable = PageRequest.of(offset,limit);
-        return ResponseEntity.ok(new Response<>(games.findAll(pageable).getContent()));
+
+        if (selectedFilter == null) {
+            // Return all games (except configuration state)
+            return ResponseEntity.ok(new Response<>(games.findAllByStateNotOrderByStateAscDateFromAscNameAsc(GameState.CONFIGURATION, pageable)));
+        }
+        else {
+            // Return games filtered by state
+            GameState stateToFilter = switch (selectedFilter) {
+                case "IN_PROGRESS" -> GameState.IN_PROGRESS;
+                case "COMPLETE" -> GameState.COMPLETE;
+                default -> GameState.REGISTRATION;
+            };
+            return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(stateToFilter, pageable)));
+        }
     }
 
     @GetMapping("/for-admin")
     @RolesAllowed("admin")
-    public ResponseEntity<Response<List<Game>>> findAllGamesForAdmin() {
-        return ResponseEntity.ok(new Response<>(games.findAll()));
+    public ResponseEntity<Response<List<Game>>> findAllGamesForAdmin(
+            @RequestParam Integer limit,
+            @RequestParam Integer offset
+    ) {
+        limit = limit < 1 ? 1 : limit;
+        offset = offset < 0 ? 0 : offset;
+        Pageable pageable = PageRequest.of(offset,limit);
+        return ResponseEntity.ok(new Response<>(games.findAllByOrderByStateAscDateFromAscNameAsc(pageable)));
     }
 
     @GetMapping("/configuration")
     @RolesAllowed("admin")
-    public ResponseEntity<Response<List<Game>>> findAllGamesWithStateConfiguration() {
-        List<Game> allGames = games.findAll();
-        List<Game> filteredGameList = allGames.stream()
-                .filter(game -> game.getState() == GameState.CONFIGURATION)
-                .distinct()
-                .toList();
-        return ResponseEntity.ok(new Response<>(filteredGameList));
+    public ResponseEntity<Response<List<Game>>> findAllGamesWithStateConfiguration(
+            @RequestParam Integer limit,
+            @RequestParam Integer offset
+    ) {
+        limit = limit < 1 ? 1 : limit;
+        offset = offset < 0 ? 0 : offset;
+        Pageable pageable = PageRequest.of(offset,limit);
+        return ResponseEntity.ok(new Response<>(games.findAllByStateEqualsOrderByDateFromAscNameAsc(GameState.CONFIGURATION, pageable)));
     }
 
     @GetMapping("{id}")

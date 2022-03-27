@@ -54,7 +54,7 @@ class GameControllerTest {
     @WithMockUser(roles = {"user"})
     void findAllGames_statusOk_shouldPass() throws Exception {
         mockMvc.perform(
-                get(getRootUrl())
+                get(getRootUrl() + "?limit=1&offset=0")
         ).andExpect(status().isOk());
     }
 
@@ -133,7 +133,7 @@ class GameControllerTest {
         Game saveResponseGame = objectMapper.readValue(responseJson.get("payload").toString(), Game.class);
 
         mockMvc.perform(
-                get(getRootUrl() + "/for-admin")
+                get(getRootUrl() + "/for-admin?limit=1&offset=0")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(content().json(objectMapper.writeValueAsString(new Response<>(List.of(saveResponseGame)))));
     }
