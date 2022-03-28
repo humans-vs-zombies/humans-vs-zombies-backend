@@ -18,7 +18,7 @@ Built using:
   - Keycloak
   - Swagger
 
-Hosted on: [Heroku](https://humans-vs-zombies-frontend.herokuapp.com/)
+Hosted on: [Heroku](https://humans-vs-zombies-backend.herokuapp.com/)
 
 ## Table of Contents
 
